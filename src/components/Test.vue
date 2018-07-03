@@ -1,12 +1,16 @@
 <template>
   <div>
-    <h1>to di list</h1>
+    <h1>to do list</h1>
     <input type="text" name="newItem" v-model="newItem" v-on:keyup.enter="addNewItem(newItem)">
     <!-- <button v-on:click="addNewItem(newItem)">新增</button> -->
     <p>待办事项</p>
     <div>
       <ul>
-        <li v-for="item in items" :key="item.lable" v-bind:class="{finished: item.isFinished}" v-on:click="changeFinished(item)">{{item.lable}}</li>
+        <li v-for="item in items" :key="item.lable">
+          <span v-bind:class="{finished: item.isFinished}" v-on:click="changeFinished(item)" v-on:dblclick="editItem(item)"
+          >{{item.lable}}</span>
+          <span v-show="item.isShow"><input type="text" name="editItemD" v-model="editItemD" v-on:keyup.enter="editItemData(item,editItemD)"></span>
+        </li>
       </ul>
     </div>
   </div>
@@ -19,9 +23,16 @@ export default {
     return {
       items: [{
         lable: 'node',
-        isFinished: true
+        isFinished: true,
+        isShow: false
       }],
-      newItem: ''
+      newItem: '',
+      editItemD: ''
+    }
+  },
+  watch: {
+    newItem (val, oldVal) {
+      console.log(`val is ${val}, oldVal is ${oldVal}`)
     }
   },
   methods: {
@@ -45,6 +56,21 @@ export default {
     },
     changeFinished: function (item) {
       item.isFinished = !item.isFinished
+    },
+    editItem: function (item) {
+      console.log('doule key')
+      item.isEdit = true
+      item.isShow = true
+    },
+    editItemData: function (item, editItemD) {
+      for (const i of this.items) {
+        console.log('old: ', i.lable)
+        console.log('new: ', item.lable)
+        if (item.lable === i.lable) {
+          i.lable = editItemD
+        }
+      }
+      item.isShow = false
     }
   }
 }
