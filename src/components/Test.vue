@@ -64,8 +64,10 @@ export default {
     },
     editItemData: function (item, editItemD) {
       for (const i of this.items) {
-        console.log('old: ', i.lable)
-        console.log('new: ', item.lable)
+        if (i.lable === editItemD) {
+          alert('事物已存在，请重新输入')
+          return
+        }
         if (item.lable === i.lable) {
           i.lable = editItemD
         }
