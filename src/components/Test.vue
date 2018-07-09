@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import storage from '../storage'
 export default {
   name: 'Test',
   data () {
@@ -30,7 +31,14 @@ export default {
       editItemD: ''
     }
   },
+  created () {
+    // storage.save('test', JSON.stringify(this.items))
+    this.items = storage.fetch('test')
+  },
   watch: {
+    items (value, oldVlue) {
+      storage.save('test', JSON.stringify(this.items))
+    },
     newItem (val, oldVal) {
       console.log(`val is ${val}, oldVal is ${oldVal}`)
     }
@@ -53,6 +61,7 @@ export default {
         isFinished: false
       })
       this.newItem = ''
+      storage.save('test', JSON.stringify(this.itmes))
     },
     changeFinished: function (item) {
       item.isFinished = !item.isFinished
